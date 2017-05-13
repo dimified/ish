@@ -7,11 +7,11 @@ export default class Detail extends Component {
     };
 
     render() {
-        const { tags } = this.props.navigation.state.params.item;
+        const { tags, image } = this.props.navigation.state.params.item;
         return (
             <ScrollView>
                 <Image
-                    source={{ uri: 'http://placehold.it/500x300' }}
+                    source={{ uri: image }}
                     style={ styles.image }
                 />
                 <Text style={ styles.headline }>Headline</Text>
