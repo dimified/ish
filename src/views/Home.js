@@ -1,3 +1,4 @@
+/* global fetch, FormData */
 import React, { Component } from 'react';
 import {
     View,
@@ -30,12 +31,37 @@ export default class Home extends Component {
     pickImage = () => {
         // openSelectDialog(config, successCallback, errorCallback);
         ImagePickerIOS.openSelectDialog({}, imageUri => {
+
+            // Show the image on the view
             this.setState({ image: imageUri });
+
+            // Send image to image-ish service (API)
+            // this.sendImage(imageUri);
         }, () => {});
     };
 
+    sendImage = (imageUri) => {
+        const body = new FormData();
+        body.append('photo', {
+            uri: imageUri,
+            type: 'image/jpeg',
+            name: `${Date.now()}.jpg`
+        });
+
+        fetch('http://10.100.126.147:3000/photoish', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'image/jpeg',
+            },
+            body
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        });
+    };
+
     render() {
-        console.log(this.state.image);
         const { navigate } = this.props.navigation;
         return (
             <View>
@@ -48,6 +74,11 @@ export default class Home extends Component {
                     onPress={ this.pickImage }
                     title="Select image"
                 />
+                <Button
+                    onPress={ () => this.sendImage(this.state.image) }
+                    title="Upload image"
+                />
+
                 {
                     this.state.image ?
                         <Image
