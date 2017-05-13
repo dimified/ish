@@ -11,7 +11,7 @@ export default class Home extends Component {
             <View>
                 <Text>List</Text>
                 <Button
-                    onPress={() => navigate('Detail')}
+                    onPress={() => navigate('Detail', { tags: ['t', 'a', 'g', 's']})}
                     title="Detail"
                 />
             </View>
