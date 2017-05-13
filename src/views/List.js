@@ -1,20 +1,35 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { ScrollView, ListView } from 'react-native';
+import Item from '../components/Item';
 
-export default class Home extends Component {
+export default class List extends Component {
     static navigationOptions = {
         title: 'Detail'
     };
+
+    constructor(props) {
+        super(props);
+        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        const { state } = this.props.navigation;
+        this.state = {
+            dataSource: ds.cloneWithRows(state.params.items)
+        };
+    }
+
     render() {
         const { navigate } = this.props.navigation;
         return (
-            <View>
-                <Text>List</Text>
-                <Button
-                    onPress={() => navigate('Detail', { tags: ['t', 'a', 'g', 's']})}
-                    title="Detail"
+            <ScrollView>
+                <ListView
+                    dataSource={ this.state.dataSource }
+                    renderRow={item =>
+                        <Item
+                            item={ item }
+                            onPress={ () => navigate('Detail', { item }) }
+                        />
+                    }
                 />
-            </View>
+            </ScrollView>
         );
     }
 }

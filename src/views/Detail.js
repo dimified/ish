@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, Image, StyleSheet, View } from 'react-native';
 
-export default class Home extends Component {
+export default class Detail extends Component {
     static navigationOptions = {
         title: 'Detail'
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
-        const { tags } = this.props.navigation.state.params;
+        const { tags } = this.props.navigation.state.params.item;
         return (
             <ScrollView>
                 <Image
