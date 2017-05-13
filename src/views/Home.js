@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import {
+    View,
+    Text,
+    Button,
+    ImagePickerIOS,
+    Image
+} from 'react-native';
 
 const items = Array(5).fill(
     {
@@ -13,7 +19,23 @@ export default class Home extends Component {
     static navigationOptions = {
         title: 'Home',
     };
+
+    constructor() {
+        super();
+        this.state = {
+            image: null
+        };
+    }
+
+    pickImage = () => {
+        // openSelectDialog(config, successCallback, errorCallback);
+        ImagePickerIOS.openSelectDialog({}, imageUri => {
+            this.setState({ image: imageUri });
+        }, () => {});
+    };
+
     render() {
+        console.log(this.state.image);
         const { navigate } = this.props.navigation;
         return (
             <View>
@@ -22,6 +44,17 @@ export default class Home extends Component {
                     onPress={() => navigate('List', { items })}
                     title="LIST"
                 />
+                <Button
+                    onPress={ this.pickImage }
+                    title="Select image"
+                />
+                {
+                    this.state.image ?
+                        <Image
+                            style={{ width: 100, height: 100 }}
+                            source={{ uri: this.state.image }}
+                        /> : null
+                }
             </View>
         );
     }
