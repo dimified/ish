@@ -23,10 +23,10 @@ export default class List extends Component {
                 <ListView
                     dataSource={ this.state.dataSource }
                     renderRow={item =>
-                        <Item
+                        item.product ? <Item
                             item={ item }
                             onPress={ () => navigate('Detail', { item }) }
-                        />
+                        /> : null
                     }
                 />
             </ScrollView>
