@@ -7,12 +7,10 @@ export default class Detail extends Component {
     };
 
     handleClick = (tags) => {
-        const url = `https://amazon.com/s/?field-keywords=mustang+shoe`;
+        const url = `https://amazon.com/s/?field-keywords=${tags.join('+')}`;
         Linking.canOpenURL(url).then(supported => {
             if (supported) {
                 Linking.openURL(url);
-            } else {
-                console.log('Don\'t know how to open URI: ' + this.props.url);
             }
         });
     };
@@ -32,7 +30,7 @@ export default class Detail extends Component {
                 <View style={ styles.wrapper }>
                     <Text style={ styles.name }>{ product.name }</Text>
                     {
-                        Array.isArray(item.tags) ?
+                        item.tags ?
                             <View style={ styles.tags }>
                                 { item.tags.map(tag => <Text style={ styles.tag } key={ tag }>{ tag }</Text>) }
                             </View> : null
@@ -64,7 +62,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     tag: {
-        marginLeft: 10,
         marginRight: 10
     },
     name: {

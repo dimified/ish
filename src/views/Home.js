@@ -29,29 +29,58 @@ export default class Home extends Component {
         this.state = {
             image: null,
             loading: false,
-            error: false,
-            items: Array(5).fill({
-                tags: ['t', 'a', 'g', 's'],
-                image: 'http://placehold.it/500x300',
-                product: {
-                    name: 'Item',
-                    images: [{
-                        url: 'http://placehold.it/500x300'
-                    }],
-                    shop: {
-                        name: 'Amazon',
-                        logo: 'http://placehold.it/500x300'
-                    },
-                    price: 34.95,
-                    desc: 'Description'
-                }
-            })
+            error: false
         };
     }
 
     componentDidMount() {
         this.getList();
     }
+
+    getList = () => {
+
+        // // Fallback data set
+        // this.setState({
+        //     items: Array(2).fill({
+        //         tags: 'mustang shoes man',
+        //         image: 'http://placehold.it/500x300',
+        //         product: {
+        //             name: 'Item',
+        //             images: [{
+        //                 url: 'http://placehold.it/500x300'
+        //             }],
+        //             shop: {
+        //                 name: 'Amazon',
+        //                 logo: 'http://placehold.it/500x300'
+        //             },
+        //             price: 34.95,
+        //             desc: 'Description'
+        //         }
+        //     })
+        // });
+
+        fetch('http://10.100.126.147:3000/ish').then(res => res.json()).then(json => {
+
+            // Mapping items
+            const items = json.map(item => {
+                return {
+                    image: item.image,
+                    tags: item.tags ? item.tags.split(' ') : [],
+                    product: item.product
+                };
+            });
+
+            this.setState({
+                error: false,
+                loading: false,
+                items: items
+            });
+        }).catch(err => {
+
+            // Error
+            console.log(err);
+        });
+    };
 
     pickImage = () => {
         // openSelectDialog(config, successCallback, errorCallback);
@@ -63,35 +92,6 @@ export default class Home extends Component {
                 image: imageUri
             });
         }, () => {});
-    };
-
-    getList = () => {
-        fetch('http://10.100.126.147:3000/ish').then(res => res.json()).then(json => {
-
-            // Mapping items
-            const items = json.map(item => {
-                return {
-                    image: item.image,
-                    tags: item.tags || [],
-                    product: item.product
-                };
-            });
-
-            this.setState({
-                error: false,
-                loading: false,
-                items
-            });
-        }).catch(err => {
-
-            this.setState({
-                error: true,
-                loading: false
-            });
-
-            // Error
-            console.log(err);
-        });
     };
 
     sendImage = (imageUri) => {
@@ -120,7 +120,7 @@ export default class Home extends Component {
             const items = json.map(item => {
                 return {
                     image: item.image,
-                    tags: item.tags || [],
+                    tags: item.tags ? item.tags.split(' ') : [],
                     product: item.product
                 };
             });

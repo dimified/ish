@@ -21,6 +21,7 @@ export default class List extends Component {
         return (
             <ScrollView>
                 <ListView
+                    enableEmptySections
                     dataSource={ this.state.dataSource }
                     renderRow={item =>
                         item.product ? <Item
